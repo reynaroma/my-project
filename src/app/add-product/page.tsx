@@ -1,11 +1,30 @@
+import prisma from "@/lib/db/prisma";
+import { redirect } from "next/navigation";
+
 export const metadata = {
   title: 'Add Product - Kabayan'
 };
-
+// server-side only; server action
 async function addProduct(formData: FormData) {
   'use server';
 
-  
+  // TODO: get form data
+  const name = formData.get('name')?.toString();
+  const description = formData.get('description')?.toString();
+  const imageUrl = formData.get('imageUrl')?.toString();
+  const price = Number(formData.get('price') || 0);
+
+  // TODO: validate input
+  if (!name || !description || !imageUrl || !price) {
+    throw new Error('Missing required fields');
+  }
+
+  // TODO: add product to database
+  await prisma.product.create({
+    data: {name, description, imageUrl, price},
+  });
+
+  redirect("/");
 }
 
 export default function AddProductPage() {
@@ -13,7 +32,7 @@ export default function AddProductPage() {
   return (
     <div>
       <h1 className="text-lg mb-3 font-bold">Add Product</h1>
-      <form>
+      <form action={addProduct}>
         <input
           required
           name="name"
