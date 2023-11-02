@@ -19,14 +19,15 @@ async function addProduct(formData: FormData) {
     throw new Error('Missing required fields');
   }
 
-  // TODO: add product to database
+  // TODO: add product to database using Prisma or create document
   await prisma.product.create({
-    data: {name, description, imageUrl, price},
+    data: { name, description, imageUrl, price },
   });
 
   redirect("/");
 }
 
+// route to AddProductPage
 export default function AddProductPage() {
 
   return (
