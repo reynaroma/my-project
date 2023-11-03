@@ -62,8 +62,7 @@ export default function AddProductPage() {
           className="input input-bordered w-full mb-3"
         />
         <FormSubmitButton
-          className="btn btn-primary btn-block"
-          type="submit">
+          className="btn-block">
           Add Product
         </FormSubmitButton>
       </form>
