@@ -1,15 +1,32 @@
 "use client";
+
+import { Product } from "@prisma/client";
+import { useState, useTransition } from "react";
+import { incrementProductQuantity } from "./actions";
+
 // Props
 interface AddToCartButtonProps {
   productId: string,
+  incrementProductQuantity: (productId: string) => Promise<void>
 }
 
 export default function AddToCartButton({ productId }: AddToCartButtonProps) {
+  // useTransition hook:
+  const [isPending, startTransition] = useTransition();
+  // use state hook:
+  const [success, setSuccess] = useState(false);
+
   return (
     <div className="flex items-center gap-2">
       <button
         className="btn btn-primary"
-        onClick={() => { }}>
+        onClick={() => {
+          setSuccess(false);
+          startTransition(async () => {
+            await incrementProductQuantity(productId);
+            setSuccess(true);
+          })
+        }}>
         Add to Cart
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -26,6 +43,8 @@ export default function AddToCartButton({ productId }: AddToCartButtonProps) {
           />
         </svg>
       </button>
+      {isPending && <span className="loading loading-spinner loading-md" />}
+      {!isPending && success && <span className="text-success">Added to Cart.</span>}
     </div>
   )
 }
