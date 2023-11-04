@@ -23,8 +23,9 @@ model Product {
 model Cart {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  CartItem  CartItem[]
 }
 
 model CartItem {
@@ -33,4 +34,5 @@ model CartItem {
   product   Product @relation(fields: [productId], references: [id])
   quantity  Int
   cartId    String  @db.ObjectId
+  cart      Cart    @relation(fields: [cartId], references: [id])
 }
